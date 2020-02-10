@@ -2,12 +2,25 @@
 
 namespace LaravelTool\Audit\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Audit
  *
+ * @property integer $id
+ * @property string $event
+ * @property string $user_type
+ * @property integer $user_id
+ * @property string $model_type
+ * @property integer $model_id
+ * @property string $parent_type
+ * @property integer $parent_id
  * @property array $changes
+ * @property string $ip
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ *
  * @package App\Models
  */
 class Audit extends Model
