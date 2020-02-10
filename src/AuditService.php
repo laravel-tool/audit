@@ -40,6 +40,10 @@ class AuditService
 
     public function rollback($level)
     {
+        if (empty($this->audit)) {
+            return;
+        }
+
         for ($i = $level + 1; $i <= max(array_keys($this->audit)); $i++) {
             unset($this->audit[$i]);
         }
