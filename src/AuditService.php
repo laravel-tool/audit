@@ -11,7 +11,7 @@ class AuditService
 {
     protected $config;
 
-    protected $audit;
+    protected $audit = [];
 
     public function __construct($config)
     {
@@ -40,7 +40,8 @@ class AuditService
 
     public function rollback($level)
     {
-        if (empty($this->audit)) {
+        if (count($this->audit) <= 1){
+            $this->audit = [];
             return;
         }
 
