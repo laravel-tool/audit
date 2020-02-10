@@ -2,11 +2,11 @@
 
 namespace LaravelTool\Audit\Jobs;
 
-use LaravelTool\Audit\Models\Audit;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use LaravelTool\Audit\Models\Audit;
 
 class AuditJob implements ShouldQueue
 {

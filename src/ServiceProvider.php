@@ -4,12 +4,9 @@
 namespace LaravelTool\Audit;
 
 
-use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Database\Events\TransactionBeginning;
 use Illuminate\Database\Events\TransactionCommitted;
 use Illuminate\Database\Events\TransactionRolledBack;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Illuminate\Support\Str;
 use LaravelTool\Audit\Listeners\DatabaseTransactionBegin;
@@ -48,9 +45,9 @@ class ServiceProvider extends BaseServiceProvider
 
     protected function registerEvents()
     {
-        Event::listen(TransactionBeginning::class, DatabaseTransactionBegin::class);
-        Event::listen(TransactionCommitted::class, DatabaseTransactionCommit::class);
-        Event::listen(TransactionRolledBack::class, DatabaseTransactionRollback::class);
+        app('events')->listen(TransactionBeginning::class, DatabaseTransactionBegin::class);
+        app('events')->listen(TransactionCommitted::class, DatabaseTransactionCommit::class);
+        app('events')->listen(TransactionRolledBack::class, DatabaseTransactionRollback::class);
     }
 
     protected function configPath()

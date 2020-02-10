@@ -3,14 +3,14 @@
 namespace LaravelTool\Audit\Observers;
 
 
-use LaravelTool\Audit\AuditService;
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;
-use LaravelTool\Audit\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Request;
+use LaravelTool\Audit\AuditService;
+use LaravelTool\Audit\Traits\Auditable;
 
 class AuditObserver
 {
@@ -69,7 +69,7 @@ class AuditObserver
             $modelId = $model->getKey();
         }
 
-        $ip = Request::ip();
+        $ip = app('request')->ip();
 
         $excluded = array_merge($this->excluded, $model->getAuditExcludes());
         $original = $model->getOriginal();
@@ -82,12 +82,17 @@ class AuditObserver
                 continue;
             }
 
-            if ($originalValue === $value) {
+            if ($originalValue == $value) {
                 continue;
             }
 
             $changes[$key] = [$originalValue, $value];
         }
+
+        if (empty($changes)) {
+            return;
+        }
+
         $parentType = null;
         $parentId = null;
         if (defined(get_class($model).'::AUDIT_PARENT_TYPE') && defined(get_class($model).'::AUDIT_PARENT_FIELD')) {
@@ -105,6 +110,7 @@ class AuditObserver
             'parent_id'   => $parentId,
             'changes'     => json_encode($changes),
             'ip'          => $ip,
+            'created_at'  => Carbon::now()
         ]);
 
     }

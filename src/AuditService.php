@@ -5,7 +5,6 @@ namespace LaravelTool\Audit;
 
 
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 use LaravelTool\Audit\Jobs\AuditJob;
 
 class AuditService
