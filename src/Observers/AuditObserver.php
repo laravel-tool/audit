@@ -42,6 +42,21 @@ class AuditObserver
 
     /**
      * @param  Model|Auditable  $model
+     */
+    public function deleting($model)
+    {
+        if ($model instanceof Pivot) {
+            $pivot = $model::query()
+                ->where($model->getForeignKey(), $model->{$model->getForeignKey()})
+                ->where($model->getRelatedKey(), $model->{$model->getRelatedKey()})
+                ->first();
+
+            $model->id = $pivot->getKey();
+        }
+    }
+
+    /**
+     * @param  Model|Auditable  $model
      * @param                 $event
      */
     protected function createJob($model, $event)
@@ -59,12 +74,12 @@ class AuditObserver
         }
 
         $modelType = get_class($model);
-        if ($model instanceof Pivot) {
+        if ($event !== 'deleted' && $model instanceof Pivot) {
             $pivot = $model::query()
                 ->where($model->getForeignKey(), $model->{$model->getForeignKey()})
                 ->where($model->getRelatedKey(), $model->{$model->getRelatedKey()})
                 ->first();
-            $modelId = $pivot->{$pivot->getKey()};
+            $modelId = $pivot->getKey();
         } else {
             $modelId = $model->getKey();
         }
