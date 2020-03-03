@@ -38,6 +38,8 @@ class ServiceProvider extends BaseServiceProvider
     {
         if (!$this->isLumen()) {
             $this->publishes([$this->configPath() => config_path('audit.php')]);
+        } else {
+            $this->app->configure('audit');
         }
 
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
